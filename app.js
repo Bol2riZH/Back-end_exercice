@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// post request
+// post
 app.post('/api/stuff', (req, res, next) => {
   delete req.body._id;
   const thing = new Thing({
@@ -51,6 +51,13 @@ app.post('/api/stuff', (req, res, next) => {
 app.put('/api/stuff/:id', (req, res, next) => {
   Thing.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'Object modify!' }))
+    .catch(error => res.status(400).json({ error }));
+});
+
+// delete
+app.delete('/api/stuff/:id', (req, res, next) => {
+  Thing.deleteOne({ _id: req.params.id })
+    .then(() => res.status(200).json({ message: 'Object deleted' }))
     .catch(error => res.status(400).json({ error }));
 });
 
